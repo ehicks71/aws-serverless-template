@@ -1,5 +1,3 @@
-# ~/environment/sam-app/buildspec.yml
-
 version: 0.2
 phases:
   install:
