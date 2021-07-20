@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Serverless app template.
+
+Parameters:
+
+  # Code Pipeline passes this in via the "deploy" stage.
+  ApplicationName:
+    Type: String
+    Description: Name of the serverless application.
+    Default: [default value here]
+
+  # Code Pipeline passes this in via the "deploy" stage.
+  EnvironmentName:
+    Type: String
+    Description: Name of the application environment.
+    Default: [default environment]
+    AllowedValues:
+      - [allowed values]
+
+Conditions:
+
+  # Environment Conditions
+  IsEnv: !Equals 
+    - !Ref EnvironmentName
+    - [default environment]
+
+Globals:
+
+  # Defaults for all APIs.
+  Api:
+    OpenApiVersion: 3.0.1 # to avoid default stage creation
+    
+  # Defaults for all Lambda functions.
+  Function:
+    Handler: index.handler
+    MemorySize: 1024
+    Runtime: nodejs12.x
+    Timeout: 180
+    Environment:
+      Variables:
+        ENVIRONMENT_NAME: !Ref EnvironmentName
+    Layers:
+      - [layer arn]
+    Tags:
+      Application: !Ref ApplicationName
+      Environment: !Ref EnvironmentName
+      Service: [service name]
+      Team: [team name]
+
+Resources:
+
+# Need to finish adding to this before you can do the app stack.
+
+  ########
+  # APIs #
+  ########
+
+  ###########
+  # Lambdas #
+  ###########
+  
+
+  ##############
+  # SNS Topics #
+  ##############
+  
+  DeploymentAlertTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: [deployment alert name]
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Service
+          Value: [service name]
+        - Key: Team
+          Value: [team name]
+
+  DeploymentAlertSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      Endpoint: '[email address]'
+      Protocol: 'email'
+      TopicArn: !Ref DeploymentAlertTopic
