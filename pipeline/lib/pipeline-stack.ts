@@ -67,15 +67,15 @@ export class PipelineStack extends cdk.Stack {
         new codepipeline_actions.CloudFormationCreateReplaceChangeSetAction({
           actionName: 'CreateChangeSet',
           templatePath: buildOutput.atPath("packaged.yaml"),
-          stackName: 'sam-app',
+          stackName: 'sam-app2',
           adminPermissions: true,
-          changeSetName: 'sam-app-dev-changeset',
+          changeSetName: 'sam-app2-dev-changeset',
           runOrder: 1
         }),
         new codepipeline_actions.CloudFormationExecuteChangeSetAction({
           actionName: 'Deploy',
-          stackName: 'sam-app',
-          changeSetName: 'sam-app-dev-changeset',
+          stackName: 'sam-app2',
+          changeSetName: 'sam-app2-dev-changeset',
           runOrder: 2
         }),
       ],
