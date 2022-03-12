@@ -8,30 +8,22 @@ Parameters:
   ApplicationName:
     Type: String
     Description: Name of the serverless application.
-    Default: WfuAitApp
+    Default: [default value here]
 
   # Code Pipeline passes this in via the "deploy" stage.
   EnvironmentName:
     Type: String
-    Description: Name of the application environment (dev, uat or prod).
-    Default: dev
+    Description: Name of the application environment.
+    Default: [default environment]
     AllowedValues:
-      - dev
-      - uat
-      - prod
+      - [allowed values]
 
 Conditions:
 
   # Environment Conditions
-  IsDev: !Equals 
+  IsEnv: !Equals 
     - !Ref EnvironmentName
-    - dev
-  IsUat: !Equals 
-    - !Ref EnvironmentName
-    - uat
-  IsProd: !Equals 
-    - !Ref EnvironmentName
-    - prod
+    - [default environment]
 
 Globals:
 
@@ -48,16 +40,13 @@ Globals:
     Environment:
       Variables:
         ENVIRONMENT_NAME: !Ref EnvironmentName
-        ENDPOINT_TYPE: ''
-        ENDPOINT_GUID: ''
-        ENDPOINT_REQUEST_CONTENT: ''
     Layers:
-      - !If [IsProd, 'arn:aws:lambda:us-east-1:841310976649:layer:WfuGlobalFunctionsProd:1', !If [IsUat, 'arn:aws:lambda:us-east-1:841310976649:layer:WfuGlobalFunctionsUat:1', 'arn:aws:lambda:us-east-1:841310976649:layer:WfuGlobalFunctionsDev:5']]
+      - [layer arn]
     Tags:
       Application: !Ref ApplicationName
       Environment: !Ref EnvironmentName
-      Service: AIT Serverless
-      Team: UA-AIT
+      Service: [service name]
+      Team: [team name]
 
 Resources:
 
@@ -81,19 +70,19 @@ Resources:
     Properties:
       Tags:
         - Key: Name
-          Value: !If [IsProd, 'DeploymentAlertTopicProd', !If [IsUat, 'DeploymentAlertTopicUat', 'DeploymentAlertTopicDev']]
+          Value: [deployment alert name]
         - Key: Application
           Value: !Ref ApplicationName
         - Key: Environment
           Value: !Ref EnvironmentName
         - Key: Service
-          Value: AIT Serverless
+          Value: [service name]
         - Key: Team
-          Value: UA-AIT
+          Value: [team name]
 
   DeploymentAlertSubscription:
     Type: 'AWS::SNS::Subscription'
     Properties:
-      Endpoint: 'ait-developers@wfu.edu'
+      Endpoint: '[email address]'
       Protocol: 'email'
       TopicArn: !Ref DeploymentAlertTopic
