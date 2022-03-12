@@ -1,0 +1,12 @@
+{
+  "name": "CodeDeployHookPre",
+  "version": "1.0.0",
+  "description": "Lambda code for testing Lambdas before traffic.",
+  "author": "Elizabeth Hicks",
+  "license": "ISC",
+  "main": "index.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
