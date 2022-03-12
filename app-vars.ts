@@ -10,7 +10,7 @@
 /**
  * @var {string} sAppBucketSlug
  * 
- * Do not add wfu-ait to the sAppBucketSlug. That is automatically done by the pipeline code.
+ * Do not add app prefix  to the sAppBucketSlug. That is automatically done by the pipeline code.
  * Can be any length.
  */
 export const sAppBucketSlug = '[bucket slug]';
@@ -18,7 +18,7 @@ export const sAppBucketSlug = '[bucket slug]';
 /**
  * @var {string} sAppInitials
  * 
- * Do not add WfuAit to the sAppInitials. That is automatically done by the pipeline code.
+ * Do not add app previx to the sAppInitials. That is automatically done by the pipeline code.
  * Keep the value to a max of3 letters.
  */
 export const sAppInitials = '[uppercase initial]';
