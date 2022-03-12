@@ -13,7 +13,7 @@
  * Do not add wfu-ait to the sAppBucketSlug. That is automatically done by the pipeline code.
  * Can be any length.
  */
-export const sAppBucketSlug = 'serverless-template';
+export const sAppBucketSlug = '[bucket slug]';
 
 /**
  * @var {string} sAppInitials
@@ -21,8 +21,8 @@ export const sAppBucketSlug = 'serverless-template';
  * Do not add WfuAit to the sAppInitials. That is automatically done by the pipeline code.
  * Keep the value to a max of3 letters.
  */
-export const sAppInitials = 'ST';
+export const sAppInitials = '[uppercase initial]';
 
-export const sRepositoryName = 'app-serverless-aws-template';
+export const sRepositoryName = '[repo template]';
 
-export const aStackEnvironments = ['Dev', 'Uat', 'Prod'];
+export const aStackEnvironments = [];
