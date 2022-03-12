@@ -1,39 +1,99 @@
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  sam-app2
+Description: Serverless app template.
 
-  Sample SAM Template for sam-app2
-  
-# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Parameters:
+
+  # Code Pipeline passes this in via the "deploy" stage.
+  ApplicationName:
+    Type: String
+    Description: Name of the serverless application.
+    Default: WfuAitApp
+
+  # Code Pipeline passes this in via the "deploy" stage.
+  EnvironmentName:
+    Type: String
+    Description: Name of the application environment (dev, uat or prod).
+    Default: dev
+    AllowedValues:
+      - dev
+      - uat
+      - prod
+
+Conditions:
+
+  # Environment Conditions
+  IsDev: !Equals 
+    - !Ref EnvironmentName
+    - dev
+  IsUat: !Equals 
+    - !Ref EnvironmentName
+    - uat
+  IsProd: !Equals 
+    - !Ref EnvironmentName
+    - prod
+
 Globals:
+
+  # Defaults for all APIs.
+  Api:
+    OpenApiVersion: 3.0.1 # to avoid default stage creation
+    
+  # Defaults for all Lambda functions.
   Function:
-    Timeout: 3
+    Handler: index.handler
+    MemorySize: 1024
+    Runtime: nodejs12.x
+    Timeout: 180
+    Environment:
+      Variables:
+        ENVIRONMENT_NAME: !Ref EnvironmentName
+        ENDPOINT_TYPE: ''
+        ENDPOINT_GUID: ''
+        ENDPOINT_REQUEST_CONTENT: ''
+    Layers:
+      - !If [IsProd, 'arn:aws:lambda:us-east-1:841310976649:layer:WfuGlobalFunctionsProd:1', !If [IsUat, 'arn:aws:lambda:us-east-1:841310976649:layer:WfuGlobalFunctionsUat:1', 'arn:aws:lambda:us-east-1:841310976649:layer:WfuGlobalFunctionsDev:5']]
+    Tags:
+      Application: !Ref ApplicationName
+      Environment: !Ref EnvironmentName
+      Service: AIT Serverless
+      Team: UA-AIT
 
 Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
-    Properties:
-      CodeUri: hello-world/
-      Handler: app.lambdaHandler
-      Runtime: nodejs12.x
-      Events:
-        HelloWorld:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
-          Properties:
-            Path: /hello
-            Method: get
 
-Outputs:
-  # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
-  # Find out more about other implicit resources you can reference within SAM
-  # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
-  HelloWorldApi:
-    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/"
-  HelloWorldFunction:
-    Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
-    Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+# Need to finish adding to this before you can do the app stack.
+
+  ########
+  # APIs #
+  ########
+
+  ###########
+  # Lambdas #
+  ###########
+  
+
+  ##############
+  # SNS Topics #
+  ##############
+  
+  DeploymentAlertTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !If [IsProd, 'DeploymentAlertTopicProd', !If [IsUat, 'DeploymentAlertTopicUat', 'DeploymentAlertTopicDev']]
+        - Key: Application
+          Value: !Ref ApplicationName
+        - Key: Environment
+          Value: !Ref EnvironmentName
+        - Key: Service
+          Value: AIT Serverless
+        - Key: Team
+          Value: UA-AIT
+
+  DeploymentAlertSubscription:
+    Type: 'AWS::SNS::Subscription'
+    Properties:
+      Endpoint: 'ait-developers@wfu.edu'
+      Protocol: 'email'
+      TopicArn: !Ref DeploymentAlertTopic
