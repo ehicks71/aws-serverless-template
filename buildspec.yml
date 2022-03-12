@@ -1,4 +1,5 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
@@ -9,18 +10,17 @@ phases:
       - pip3 install --upgrade aws-sam-cli
       - sam --version
       # Installing project dependencies
-      - cd hello-world
-      - npm install
+      - ./run-lambdas-install.sh
+      - ./run-layers-install.sh
   
   pre_build:
     commands:
       # Run tests, lint scripts or any other pre-build checks.
-      - npm run test
+      # - npm run test
 
   build:
     commands:
       # Use Build phase to build your artifacts (compile, etc.)
-      - cd ..
       - sam build
 
   post_build:

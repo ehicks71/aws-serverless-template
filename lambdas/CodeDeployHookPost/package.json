@@ -1,0 +1,12 @@
+{
+  "name": "CodeDeployHookPost",
+  "version": "1.0.0",
+  "description": "Lambda code for testing Lambdas after traffic.",
+  "author": "Elizabeth Hicks",
+  "license": "ISC",
+  "main": "index.js",
+  "dependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
