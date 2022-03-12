@@ -18,7 +18,7 @@ export const sAppBucketSlug = '[bucket slug]';
 /**
  * @var {string} sAppInitials
  * 
- * Do not add app previx to the sAppInitials. That is automatically done by the pipeline code.
+ * Do not add app prefix to the sAppInitials. That is automatically done by the pipeline code.
  * Keep the value to a max of3 letters.
  */
 export const sAppInitials = '[uppercase initial]';
