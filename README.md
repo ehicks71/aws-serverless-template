@@ -7,7 +7,7 @@ For use with a CDK stack.
 Build your application with the `sam build` command.
 
 ```bash
-sam-app2$ sam build
+sam build
 ```
 
 The SAM CLI installs dependencies defined in `hello-world/package.json`, creates a deployment package, and saves it in the `.aws-sam/build` folder.
@@ -17,14 +17,14 @@ Test a single function by invoking it directly with a test event. An event is a 
 Run functions locally and invoke them with the `sam local invoke` command.
 
 ```bash
-sam-app2$ sam local invoke HelloWorldFunction --event events/event.json
+sam local invoke HelloWorldFunction --event events/event.json
 ```
 
 The SAM CLI can also emulate your application's API. Use the `sam local start-api` to run the API locally on port 3000.
 
 ```bash
-sam-app2$ sam local start-api
-sam-app2$ curl http://localhost:3000/
+sam local start-api
+curl http://localhost:3000/
 ```
 
 The SAM CLI reads the application template to determine the API's routes and the functions that they invoke. The `Events` property on each function's definition includes the route and method for each path.
@@ -48,7 +48,7 @@ To simplify troubleshooting, SAM CLI has a command called `sam logs`. `sam logs`
 `NOTE`: This command works for all AWS Lambda functions; not just the ones you deploy using SAM.
 
 ```bash
-sam-app2$ sam logs -n HelloWorldFunction --stack-name sam-app2 --tail
+sam logs -n HelloWorldFunction --stack-name sam-app2 --tail
 ```
 
 You can find more information and examples about filtering Lambda function logs in the [SAM CLI Documentation](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-logging.html).
@@ -58,13 +58,13 @@ You can find more information and examples about filtering Lambda function logs 
 Tests are defined in the `hello-world/tests` folder in this project. Use NPM to install the [Mocha test framework](https://mochajs.org/) and run tests.
 
 ```bash
-sam-app2$ cd hello-world
-hello-world$ npm install
+cd hello-world
+npm install
 # Unit test
-hello-world$ npm run test
+npm run test
 # Integration test, requiring deploying the stack first.
 # Create the env variable AWS_SAM_STACK_NAME with the name of the stack we are testing
-hello-world$ AWS_SAM_STACK_NAME=<stack-name> npm run integ-test
+AWS_SAM_STACK_NAME=<stack-name> npm run integ-test
 ```
 
 ## Cleanup
